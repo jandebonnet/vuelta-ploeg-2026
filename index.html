@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ploeg van Jan</title>
+<meta name="description" content="Sporza Wielermanager-ploeg voor de Vuelta a España 2026, samengesteld door Jan.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+  :root {
+    --bg: #F5F7FA;
+    --surface: #FFFFFF;
+    --surface-2: #ECEFF3;
+    --border: #DBE1E7;
+    --text: #17212B;
+    --text-muted: #56636F;
+    --accent: #2757D6;
+    --accent-soft: #E9EFFC;
+    --accent-contrast: #FFFFFF;
+    --good: #1F8A54;
+
+    --font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+    --font-body: "Public Sans", system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0B1119;
+      --surface: #141C26;
+      --surface-2: #1C2530;
+      --border: #2A3542;
+      --text: #E7EDF3;
+      --text-muted: #8FA0AF;
+      --accent: #6C9BFF;
+      --accent-soft: #16233F;
+      --accent-contrast: #06101C;
+      --good: #3FBE81;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0B1119;
+    --surface: #141C26;
+    --surface-2: #1C2530;
+    --border: #2A3542;
+    --text: #E7EDF3;
+    --text-muted: #8FA0AF;
+    --accent: #6C9BFF;
+    --accent-soft: #16233F;
+    --accent-contrast: #06101C;
+    --good: #3FBE81;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.5;
+    padding: clamp(20px, 5vw, 56px);
+    min-height: 100vh;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; }
+
+  /* --- hero --- */
+  .hero { display: flex; flex-direction: column; gap: 10px; }
+  .eyebrow {
+    font-family: var(--font-display);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 13px;
+    color: var(--accent);
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(40px, 8vw, 64px);
+    text-wrap: balance;
+    margin: 0;
+    letter-spacing: 0.005em;
+    line-height: 0.98;
+  }
+  .credit { color: var(--text-muted); font-size: 15px; }
+  .credit strong { color: var(--text); font-weight: 600; }
+
+  /* --- stat strip --- */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  .stat {
+    padding: 18px 20px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .stat:last-child { border-right: none; }
+  .stat .num {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 28px;
+    font-weight: 600;
+  }
+  .stat .lbl {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 11.5px;
+    color: var(--text-muted);
+  }
+  .budget-bar {
+    grid-column: 1 / -1;
+    padding: 14px 20px 18px;
+    border-top: 1px solid var(--border);
+  }
+  .budget-bar .track {
+    height: 8px;
+    border-radius: 100px;
+    background: var(--surface-2);
+    overflow: hidden;
+    margin-top: 8px;
+  }
+  .budget-bar .fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 100px;
+    width: 97%;
+  }
+  .budget-bar .row { display: flex; justify-content: space-between; font-size: 12.5px; color: var(--text-muted); font-family: var(--font-mono); }
+
+  /* --- section --- */
+  section { display: flex; flex-direction: column; gap: 14px; }
+  .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  h2 {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin: 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    flex: 1;
+  }
+  .section-count { font-family: var(--font-mono); font-size: 13px; color: var(--text-muted); padding-bottom: 8px; }
+
+  .roster-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+  .rider {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+  }
+  .rider.is-captain { border-color: var(--accent); background: var(--accent-soft); }
+  .rider .top-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .rider .bib { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); }
+  .rider .badge {
+    font-family: var(--font-display);
+    font-size: 10.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    background: var(--surface);
+    border: 1px solid var(--accent);
+    border-radius: 100px;
+    padding: 1px 7px;
+  }
+  .rider .name { font-weight: 600; font-size: 15.5px; }
+  .rider .meta { display: flex; justify-content: space-between; align-items: baseline; font-size: 12.5px; color: var(--text-muted); }
+  .rider .price { font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--text); }
+
+  .roster-grid.reserve .rider { opacity: 0.82; }
+
+  footer.note {
+    font-size: 13px;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hero, .stats, section { animation: rise 0.5s ease backwards; }
+    .stats { animation-delay: 0.08s; }
+    section:nth-of-type(1) { animation-delay: 0.14s; }
+    section:nth-of-type(2) { animation-delay: 0.2s; }
+    @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <span class="eyebrow">Sporza Wielermanager &middot; Vuelta a España 2026</span>
+    <h1>Ploeg van Jan</h1>
+    <p class="credit">21 ritten, <strong>16 renners</strong>, &eacute;&eacute;n kopman per dag &mdash; dit is de ploeg waarmee Jan het peloton induikt.</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><span class="num">16</span><span class="lbl">Renners</span></div>
+    <div class="stat"><span class="num">12</span><span class="lbl">Starters / rit</span></div>
+    <div class="stat"><span class="num" style="font-size:20px;">Pogačar</span><span class="lbl">Kopman</span></div>
+    <div class="stat"><span class="num">9</span><span class="lbl">WorldTour-ploegen</span></div>
+    <div class="budget-bar">
+      <div class="row"><span>Budget besteed</span><span>€97M / €100M</span></div>
+      <div class="track"><div class="fill"></div></div>
+    </div>
+  </div>
+
+  <section>
+    <div class="section-head"><h2>Start voor rit 1</h2><span class="section-count">12 renners</span></div>
+    <div class="roster-grid">
+      <div class="rider is-captain"><div class="top-row"><span class="bib">01</span><span class="badge">Kopman</span></div><span class="name">Tadej Pogačar</span><div class="meta"><span>UAE Team Emirates-XRG</span><span class="price">€15M</span></div></div>
+      <div class="rider"><div class="top-row"><span class="bib">02</span></div><span class="name">Wout van Aert</span><div class="meta"><span>Visma-Lease a Bike</span><span class="price">€11M</span></div></div>
+      <div class="rider"><div class="top-row"><span class="bib">03</span></div><span class="name">Mads Pedersen</span><div class="meta"><span>Lidl-Trek</span><span class="price">€11M</span></div></div>
+      <div class="rider"><div class="top-row"><span class="bib">04</span></div><span class="name">João Almeida</span><div class="meta"><span>UAE Team Emirates-XRG</span><span class="price">€8M</span></div></div>
+      <div class="rider"><div class="top-row"><span class="bib">05</span></div><span class="name">Oscar Onley</span><div class="meta"><span>Ineos Grenadiers</span><span class="price">€8M</span></div></div>
+      <div class="rider"><div class="top-row"><span class="bib">06</span></div><span class="name">Kaden Groves</span><div class="meta"><span>Alpecin-Deceuninck</span><span class="price">€7M</span></div></div>
+      <div class="rider"><div class="top-row"><span class="bib">07</span></div><span class="name">Primož Roglič</span><div class="meta"><span>Red Bull-BORA-hansgrohe</span><span class="price">€7M</span></div></div>
+      <div class="rider"><div class="top-row"><span class="bib">08</span></div><span class="name">Sepp Kuss</span><div class="meta"><span>Visma-Lease a Bike</span><span class="price">€6M</span></div></div>
+      <div class="rider"><div class="top-row"><span class="bib">09</span></div><span class="name">Santiago Buitrago</span><div class="meta"><span>Bahrain Victorious</span><span class="price">€5M</span></div></div>
+      <div class="rider"><div class="top-row"><span class="bib">10</span></div><span class="name">Jay Vine</span><div class="meta"><span>UAE Team Emirates-XRG</span><span class="price">€5M</span></div></div>
+      <div class="rider"><div class="top-row"><span class="bib">11</span></div><span class="name">Lennard Kämna</span><div class="meta"><span>Lidl-Trek</span><span class="price">€3M</span></div></div>
+      <div class="rider"><div class="top-row"><span class="bib">12</span></div><span class="name">Matevž Govekar</span><div class="meta"><span>Bahrain Victorious</span><span class="price">€3M</span></div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Op de bus</h2><span class="section-count">4 renners</span></div>
+    <div class="roster-grid reserve">
+      <div class="rider"><div class="top-row"><span class="bib">13</span></div><span class="name">Jack Haig</span><div class="meta"><span>Ineos Grenadiers</span><span class="price">€2M</span></div></div>
+      <div class="rider"><div class="top-row"><span class="bib">14</span></div><span class="name">Frederik Wandahl</span><div class="meta"><span>Red Bull-BORA-hansgrohe</span><span class="price">€2M</span></div></div>
+      <div class="rider"><div class="top-row"><span class="bib">15</span></div><span class="name">Rémy Rochas</span><div class="meta"><span>Groupama-FDJ</span><span class="price">€2M</span></div></div>
+      <div class="rider"><div class="top-row"><span class="bib">16</span></div><span class="name">Fabio Van den Bossche</span><div class="meta"><span>Soudal Quick-Step</span><span class="price">€2M</span></div></div>
+    </div>
+  </section>
+
+  <footer class="note">Sporza Wielermanager &middot; Vuelta a España 2026, 22 augustus &ndash; 13 september. Deze opstelling geldt voor rit 1 en kan nog wijzigen bij transfers.</footer>
+</div>
+</body>
+</html>
