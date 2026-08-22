@@ -154,7 +154,7 @@
   .section-count { font-family: var(--font-mono); font-size: 13px; color: var(--text-muted); padding-bottom: 8px; }
   .section-hint { font-size: 12.5px; color: var(--text-muted); margin: -6px 0 0; }
 
-  /* --- team distribution --- */
+  /* --- team distribution / filter --- */
   .team-dist { display: flex; flex-wrap: wrap; gap: 8px; }
   .team-dist .team-chip {
     display: inline-flex;
@@ -165,7 +165,12 @@
     border-radius: 100px;
     padding: 6px 12px 6px 14px;
     font-size: 13px;
+    font-family: inherit;
+    color: var(--text);
+    cursor: pointer;
   }
+  .team-dist .team-chip:hover { border-color: var(--accent); }
+  .team-dist .team-chip.active { border-color: var(--accent); background: var(--accent-soft); }
   .team-dist .team-chip .count {
     font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
@@ -175,6 +180,15 @@
     border-radius: 100px;
     padding: 1px 7px;
     font-size: 12px;
+  }
+  .team-dist .team-chip.active .count { background: var(--surface); }
+  .team-dist .team-chip.clear {
+    border-style: dashed;
+    color: var(--text-muted);
+  }
+  .team-dist .team-chip.clear.active {
+    border-style: solid;
+    color: var(--text);
   }
 
   /* --- roster --- */
@@ -284,45 +298,47 @@
 
   <section>
     <div class="section-head"><h2>Renners per ploeg</h2><span class="section-count">9 ploegen</span></div>
-    <div class="team-dist">
-      <span class="team-chip">UAE Team Emirates-XRG <span class="count">3</span></span>
-      <span class="team-chip">Visma-Lease a Bike <span class="count">2</span></span>
-      <span class="team-chip">Lidl-Trek <span class="count">2</span></span>
-      <span class="team-chip">Ineos Grenadiers <span class="count">2</span></span>
-      <span class="team-chip">Bahrain Victorious <span class="count">2</span></span>
-      <span class="team-chip">Red Bull-BORA-hansgrohe <span class="count">2</span></span>
-      <span class="team-chip">Alpecin-Deceuninck <span class="count">1</span></span>
-      <span class="team-chip">Groupama-FDJ <span class="count">1</span></span>
-      <span class="team-chip">Soudal Quick-Step <span class="count">1</span></span>
+    <p class="section-hint">Klik een ploeg aan om te filteren &mdash; klik "Alle renners" om het filter te wissen.</p>
+    <div class="team-dist" id="team-filter">
+      <button type="button" class="team-chip clear active" data-team="">Alle renners</button>
+      <button type="button" class="team-chip" data-team="UAE Team Emirates-XRG">UAE Team Emirates-XRG <span class="count">3</span></button>
+      <button type="button" class="team-chip" data-team="Visma-Lease a Bike">Visma-Lease a Bike <span class="count">2</span></button>
+      <button type="button" class="team-chip" data-team="Lidl-Trek">Lidl-Trek <span class="count">2</span></button>
+      <button type="button" class="team-chip" data-team="Ineos Grenadiers">Ineos Grenadiers <span class="count">2</span></button>
+      <button type="button" class="team-chip" data-team="Bahrain Victorious">Bahrain Victorious <span class="count">2</span></button>
+      <button type="button" class="team-chip" data-team="Red Bull-BORA-hansgrohe">Red Bull-BORA-hansgrohe <span class="count">2</span></button>
+      <button type="button" class="team-chip" data-team="Alpecin-Deceuninck">Alpecin-Deceuninck <span class="count">1</span></button>
+      <button type="button" class="team-chip" data-team="Groupama-FDJ">Groupama-FDJ <span class="count">1</span></button>
+      <button type="button" class="team-chip" data-team="Soudal Quick-Step">Soudal Quick-Step <span class="count">1</span></button>
     </div>
   </section>
 
   <section>
-    <div class="section-head"><h2>Start voor rit 1</h2><span class="section-count">12 renners</span></div>
+    <div class="section-head"><h2>Start voor rit 1</h2><span class="section-count" id="count-start">12 renners</span></div>
     <p class="section-hint">Klik een renner open voor nationaliteit, leeftijd, UCI-ranking en rennerstype.</p>
-    <div class="roster-grid">
-      <details class="rider is-captain"><summary><div class="top-row"><span class="bib">01</span><span class="badge">Kopman</span></div><span class="name">Tadej Pogačar</span><div class="meta"><span>UAE Team Emirates-XRG</span><span class="price">€15M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">Slovenië</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="1998-09-21"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">#1</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">Allrounder, Ronderenner</span></div></div></details>
-      <details class="rider"><summary><div class="top-row"><span class="bib">02</span></div><span class="name">Wout van Aert</span><div class="meta"><span>Visma-Lease a Bike</span><span class="price">€11M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">België</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="1994-09-15"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">#14</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">Allrounder, Sprinter</span></div></div></details>
-      <details class="rider"><summary><div class="top-row"><span class="bib">03</span></div><span class="name">Mads Pedersen</span><div class="meta"><span>Lidl-Trek</span><span class="price">€11M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">Denemarken</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="1995-12-18"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">#12</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">Allrounder, Sprinter</span></div></div></details>
-      <details class="rider"><summary><div class="top-row"><span class="bib">04</span></div><span class="name">João Almeida</span><div class="meta"><span>UAE Team Emirates-XRG</span><span class="price">€8M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">Portugal</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="1998-08-05"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">#27</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">Klimmer, Tijdrijder</span></div></div></details>
-      <details class="rider"><summary><div class="top-row"><span class="bib">05</span></div><span class="name">Oscar Onley</span><div class="meta"><span>Ineos Grenadiers</span><span class="price">€8M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">Schotland</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="2002-10-13"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">#148</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">&mdash;</span></div></div></details>
-      <details class="rider"><summary><div class="top-row"><span class="bib">06</span></div><span class="name">Kaden Groves</span><div class="meta"><span>Alpecin-Deceuninck</span><span class="price">€7M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">Australië</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="1998-12-23"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">&mdash;</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">Sprinter</span></div></div></details>
-      <details class="rider"><summary><div class="top-row"><span class="bib">07</span></div><span class="name">Primož Roglič</span><div class="meta"><span>Red Bull-BORA-hansgrohe</span><span class="price">€7M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">Slovenië</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="1989-10-29"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">#77</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">Ronderenner</span></div></div></details>
-      <details class="rider"><summary><div class="top-row"><span class="bib">08</span></div><span class="name">Sepp Kuss</span><div class="meta"><span>Visma-Lease a Bike</span><span class="price">€6M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">Verenigde Staten</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="1994-09-13"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">#49</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">Klimmer, Ronderenner</span></div></div></details>
-      <details class="rider"><summary><div class="top-row"><span class="bib">09</span></div><span class="name">Santiago Buitrago</span><div class="meta"><span>Bahrain Victorious</span><span class="price">€5M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">Colombia</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="1999-09-26"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">#99</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">Allrounder, Klimmer</span></div></div></details>
-      <details class="rider"><summary><div class="top-row"><span class="bib">10</span></div><span class="name">Jay Vine</span><div class="meta"><span>UAE Team Emirates-XRG</span><span class="price">€5M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">Australië</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="1995-11-16"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">#24</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">Ronderenner, Tijdrijder</span></div></div></details>
-      <details class="rider"><summary><div class="top-row"><span class="bib">11</span></div><span class="name">Lennard Kämna</span><div class="meta"><span>Lidl-Trek</span><span class="price">€3M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">Duitsland</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="1996-09-09"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">&mdash;</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">Vrijbuiter/aanvaller</span></div></div></details>
-      <details class="rider"><summary><div class="top-row"><span class="bib">12</span></div><span class="name">Matevž Govekar</span><div class="meta"><span>Bahrain Victorious</span><span class="price">€3M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">Slovenië</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="2000-04-17"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">&mdash;</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">Sprinter</span></div></div></details>
+    <div class="roster-grid" id="roster-start">
+      <details class="rider is-captain" data-team="UAE Team Emirates-XRG"><summary><div class="top-row"><span class="bib">01</span><span class="badge">Kopman</span></div><span class="name">Tadej Pogačar</span><div class="meta"><span>UAE Team Emirates-XRG</span><span class="price">€15M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">Slovenië</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="1998-09-21"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">#1</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">Allrounder, Ronderenner</span></div></div></details>
+      <details class="rider" data-team="Visma-Lease a Bike"><summary><div class="top-row"><span class="bib">02</span></div><span class="name">Wout van Aert</span><div class="meta"><span>Visma-Lease a Bike</span><span class="price">€11M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">België</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="1994-09-15"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">#14</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">Allrounder, Sprinter</span></div></div></details>
+      <details class="rider" data-team="Lidl-Trek"><summary><div class="top-row"><span class="bib">03</span></div><span class="name">Mads Pedersen</span><div class="meta"><span>Lidl-Trek</span><span class="price">€11M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">Denemarken</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="1995-12-18"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">#12</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">Allrounder, Sprinter</span></div></div></details>
+      <details class="rider" data-team="UAE Team Emirates-XRG"><summary><div class="top-row"><span class="bib">04</span></div><span class="name">João Almeida</span><div class="meta"><span>UAE Team Emirates-XRG</span><span class="price">€8M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">Portugal</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="1998-08-05"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">#27</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">Klimmer, Tijdrijder</span></div></div></details>
+      <details class="rider" data-team="Ineos Grenadiers"><summary><div class="top-row"><span class="bib">05</span></div><span class="name">Oscar Onley</span><div class="meta"><span>Ineos Grenadiers</span><span class="price">€8M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">Schotland</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="2002-10-13"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">#148</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">&mdash;</span></div></div></details>
+      <details class="rider" data-team="Alpecin-Deceuninck"><summary><div class="top-row"><span class="bib">06</span></div><span class="name">Kaden Groves</span><div class="meta"><span>Alpecin-Deceuninck</span><span class="price">€7M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">Australië</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="1998-12-23"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">&mdash;</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">Sprinter</span></div></div></details>
+      <details class="rider" data-team="Red Bull-BORA-hansgrohe"><summary><div class="top-row"><span class="bib">07</span></div><span class="name">Primož Roglič</span><div class="meta"><span>Red Bull-BORA-hansgrohe</span><span class="price">€7M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">Slovenië</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="1989-10-29"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">#77</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">Ronderenner</span></div></div></details>
+      <details class="rider" data-team="Visma-Lease a Bike"><summary><div class="top-row"><span class="bib">08</span></div><span class="name">Sepp Kuss</span><div class="meta"><span>Visma-Lease a Bike</span><span class="price">€6M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">Verenigde Staten</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="1994-09-13"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">#49</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">Klimmer, Ronderenner</span></div></div></details>
+      <details class="rider" data-team="Bahrain Victorious"><summary><div class="top-row"><span class="bib">09</span></div><span class="name">Santiago Buitrago</span><div class="meta"><span>Bahrain Victorious</span><span class="price">€5M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">Colombia</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="1999-09-26"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">#99</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">Allrounder, Klimmer</span></div></div></details>
+      <details class="rider" data-team="UAE Team Emirates-XRG"><summary><div class="top-row"><span class="bib">10</span></div><span class="name">Jay Vine</span><div class="meta"><span>UAE Team Emirates-XRG</span><span class="price">€5M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">Australië</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="1995-11-16"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">#24</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">Ronderenner, Tijdrijder</span></div></div></details>
+      <details class="rider" data-team="Lidl-Trek"><summary><div class="top-row"><span class="bib">11</span></div><span class="name">Lennard Kämna</span><div class="meta"><span>Lidl-Trek</span><span class="price">€3M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">Duitsland</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="1996-09-09"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">&mdash;</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">Vrijbuiter/aanvaller</span></div></div></details>
+      <details class="rider" data-team="Bahrain Victorious"><summary><div class="top-row"><span class="bib">12</span></div><span class="name">Matevž Govekar</span><div class="meta"><span>Bahrain Victorious</span><span class="price">€3M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">Slovenië</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="2000-04-17"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">&mdash;</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">Sprinter</span></div></div></details>
     </div>
   </section>
 
   <section>
-    <div class="section-head"><h2>Op de bus</h2><span class="section-count">4 renners</span></div>
-    <div class="roster-grid reserve">
-      <details class="rider"><summary><div class="top-row"><span class="bib">13</span></div><span class="name">Jack Haig</span><div class="meta"><span>Ineos Grenadiers</span><span class="price">€2M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">Australië</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="1993-09-06"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">&mdash;</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">Klimmer</span></div></div></details>
-      <details class="rider"><summary><div class="top-row"><span class="bib">14</span></div><span class="name">Frederik Wandahl</span><div class="meta"><span>Red Bull-BORA-hansgrohe</span><span class="price">€2M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">Denemarken</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="2001-05-09"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">&mdash;</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">&mdash;</span></div></div></details>
-      <details class="rider"><summary><div class="top-row"><span class="bib">15</span></div><span class="name">Rémy Rochas</span><div class="meta"><span>Groupama-FDJ</span><span class="price">€2M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">Frankrijk</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="1996-05-18"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">&mdash;</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">Vrijbuiter/aanvaller</span></div></div></details>
-      <details class="rider"><summary><div class="top-row"><span class="bib">16</span></div><span class="name">Fabio Van den Bossche</span><div class="meta"><span>Soudal Quick-Step</span><span class="price">€2M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">België</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="2000-09-21"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">&mdash;</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">Lead-out</span></div></div></details>
+    <div class="section-head"><h2>Op de bus</h2><span class="section-count" id="count-bus">4 renners</span></div>
+    <div class="roster-grid reserve" id="roster-bus">
+      <details class="rider" data-team="Ineos Grenadiers"><summary><div class="top-row"><span class="bib">13</span></div><span class="name">Jack Haig</span><div class="meta"><span>Ineos Grenadiers</span><span class="price">€2M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">Australië</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="1993-09-06"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">&mdash;</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">Klimmer</span></div></div></details>
+      <details class="rider" data-team="Red Bull-BORA-hansgrohe"><summary><div class="top-row"><span class="bib">14</span></div><span class="name">Frederik Wandahl</span><div class="meta"><span>Red Bull-BORA-hansgrohe</span><span class="price">€2M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">Denemarken</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="2001-05-09"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">&mdash;</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">&mdash;</span></div></div></details>
+      <details class="rider" data-team="Groupama-FDJ"><summary><div class="top-row"><span class="bib">15</span></div><span class="name">Rémy Rochas</span><div class="meta"><span>Groupama-FDJ</span><span class="price">€2M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">Frankrijk</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="1996-05-18"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">&mdash;</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">Vrijbuiter/aanvaller</span></div></div></details>
+      <details class="rider" data-team="Soudal Quick-Step"><summary><div class="top-row"><span class="bib">16</span></div><span class="name">Fabio Van den Bossche</span><div class="meta"><span>Soudal Quick-Step</span><span class="price">€2M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">België</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="2000-09-21"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">&mdash;</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">Lead-out</span></div></div></details>
     </div>
   </section>
 
@@ -339,6 +355,36 @@
         (today.getMonth() === dob.getMonth() && today.getDate() >= dob.getDate());
       if (!hadBirthday) age--;
       el.textContent = age + ' jaar';
+    });
+  })();
+
+  (function () {
+    var chips = Array.prototype.slice.call(document.querySelectorAll('#team-filter .team-chip'));
+    var sections = [
+      { grid: document.getElementById('roster-start'), countEl: document.getElementById('count-start'), total: 12 },
+      { grid: document.getElementById('roster-bus'), countEl: document.getElementById('count-bus'), total: 4 }
+    ];
+
+    function applyFilter(team) {
+      chips.forEach(function (c) {
+        c.classList.toggle('active', c.dataset.team === team);
+      });
+      sections.forEach(function (s) {
+        var visible = 0;
+        Array.prototype.slice.call(s.grid.querySelectorAll('details.rider')).forEach(function (r) {
+          var match = !team || r.dataset.team === team;
+          r.style.display = match ? '' : 'none';
+          if (match) visible++;
+        });
+        s.countEl.textContent = team ? (visible + ' van ' + s.total + ' renners') : (s.total + ' renners');
+        s.grid.closest('section').hidden = visible === 0;
+      });
+    }
+
+    chips.forEach(function (c) {
+      c.addEventListener('click', function () {
+        applyFilter(c.dataset.team || null);
+      });
     });
   })();
 </script>
