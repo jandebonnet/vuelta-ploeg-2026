@@ -334,6 +334,42 @@
   }
   .entry-body p { margin: 0; font-size: 13.5px; color: var(--text); }
 
+  /* --- klassement --- */
+  .chart-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 16px 6px;
+  }
+  .chart-wrap svg { width: 100%; height: auto; display: block; }
+  .chart-grid-line { stroke: var(--border); stroke-width: 1; }
+  .chart-axis-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    fill: var(--text-muted);
+  }
+  .chart-line { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+  .chart-area { fill: var(--accent); opacity: 0.1; }
+  .chart-point { fill: var(--surface); stroke: var(--accent); stroke-width: 2.5; }
+
+  .klassement-table { width: 100%; border-collapse: collapse; }
+  .klassement-table th, .klassement-table td {
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+  }
+  .klassement-table thead th {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 11px;
+    color: var(--text-muted);
+    background: var(--surface-2);
+  }
+  .klassement-table tbody tr:last-child td { border-bottom: none; }
+  .klassement-table td.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
   footer.note {
     font-size: 13px;
     color: var(--text-muted);
@@ -347,6 +383,7 @@
     section:nth-of-type(1) { animation-delay: 0.11s; }
     section:nth-of-type(2) { animation-delay: 0.14s; }
     section:nth-of-type(3) { animation-delay: 0.17s; }
+    section:nth-of-type(4) { animation-delay: 0.2s; }
     @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
   }
 </style>
@@ -372,6 +409,20 @@
 
   <div class="content-grid">
   <div class="main-col">
+
+  <section>
+    <div class="section-head"><h2>Klassement</h2><span class="section-count" id="klassement-count">1 rit</span></div>
+    <p class="section-hint">Plaats in het tussentijdse klassement, uitgedrukt als percentiel &mdash; hoger is beter.</p>
+    <div class="chart-wrap">
+      <svg id="klassement-chart" viewBox="0 0 600 220" role="img" aria-label="Evolutie van het klassementspercentiel per rit"></svg>
+    </div>
+    <div class="table-scroll">
+      <table class="klassement-table">
+        <thead><tr><th>Rit</th><th>Datum</th><th>Punten</th><th>Plaats</th><th>Percentiel</th></tr></thead>
+        <tbody id="klassement-body"></tbody>
+      </table>
+    </div>
+  </section>
 
   <section>
     <div class="section-head"><h2>Renners per ploeg</h2><span class="section-count">9 ploegen</span></div>
@@ -449,6 +500,74 @@
 </div>
 
 <script>
+  (function () {
+    var KLASSEMENT_DATA = [
+      { rit: 1, datum: '22 aug', punten: null, plaats: 14123, deelnemers: 37642 }
+    ];
+
+    var svgNS = 'http://www.w3.org/2000/svg';
+    var svg = document.getElementById('klassement-chart');
+    var tbody = document.getElementById('klassement-body');
+    var countEl = document.getElementById('klassement-count');
+    if (!svg || !tbody) return;
+
+    var W = 600, H = 220, padL = 34, padR = 14, padT = 14, padB = 28;
+    var plotW = W - padL - padR, plotH = H - padT - padB;
+
+    function percentiel(plaats, deelnemers) {
+      return ((deelnemers - plaats) / deelnemers) * 100;
+    }
+
+    function svgEl(tag, attrs) {
+      var el = document.createElementNS(svgNS, tag);
+      Object.keys(attrs).forEach(function (k) { el.setAttribute(k, attrs[k]); });
+      return el;
+    }
+
+    countEl.textContent = KLASSEMENT_DATA.length + (KLASSEMENT_DATA.length === 1 ? ' rit' : ' ritten');
+
+    [0, 25, 50, 75, 100].forEach(function (v) {
+      var y = padT + plotH - (v / 100) * plotH;
+      svg.appendChild(svgEl('line', { x1: padL, x2: W - padR, y1: y, y2: y, class: 'chart-grid-line' }));
+      var label = svgEl('text', { x: padL - 6, y: y + 3, 'text-anchor': 'end', class: 'chart-axis-label' });
+      label.textContent = v + '%';
+      svg.appendChild(label);
+    });
+
+    var n = KLASSEMENT_DATA.length;
+    var points = KLASSEMENT_DATA.map(function (d, i) {
+      var x = n === 1 ? padL + plotW / 2 : padL + (i / (n - 1)) * plotW;
+      var pct = percentiel(d.plaats, d.deelnemers);
+      var y = padT + plotH - (Math.max(0, Math.min(100, pct)) / 100) * plotH;
+      return { x: x, y: y, pct: pct, d: d };
+    });
+
+    if (n > 1) {
+      var linePath = 'M' + points.map(function (p) { return p.x + ',' + p.y; }).join(' L');
+      var areaPath = linePath + ' L' + points[n - 1].x + ',' + (padT + plotH) + ' L' + points[0].x + ',' + (padT + plotH) + ' Z';
+      svg.appendChild(svgEl('path', { d: areaPath, class: 'chart-area' }));
+      svg.appendChild(svgEl('path', { d: linePath, class: 'chart-line' }));
+    }
+
+    points.forEach(function (p) {
+      svg.appendChild(svgEl('circle', { cx: p.x, cy: p.y, r: 4, class: 'chart-point' }));
+      var xl = svgEl('text', { x: p.x, y: H - 8, 'text-anchor': 'middle', class: 'chart-axis-label' });
+      xl.textContent = 'Rit ' + p.d.rit;
+      svg.appendChild(xl);
+    });
+
+    KLASSEMENT_DATA.forEach(function (d) {
+      var pct = percentiel(d.plaats, d.deelnemers);
+      var tr = document.createElement('tr');
+      tr.innerHTML = '<td>' + d.rit + '</td>' +
+        '<td>' + d.datum + '</td>' +
+        '<td class="mono">' + (d.punten != null ? d.punten : '—') + '</td>' +
+        '<td class="mono">' + d.plaats.toLocaleString('nl-BE') + ' / ' + d.deelnemers.toLocaleString('nl-BE') + '</td>' +
+        '<td class="mono">Beter dan ' + pct.toFixed(1) + '%</td>';
+      tbody.appendChild(tr);
+    });
+  })();
+
   (function () {
     var today = new Date();
     document.querySelectorAll('.age[data-dob]').forEach(function (el) {
