@@ -62,6 +62,15 @@
     min-height: 100vh;
   }
   .wrap { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; }
+  .wrap.has-sidebar { max-width: 1180px; }
+
+  /* --- content grid (main + journal sidebar) --- */
+  .content-grid { display: flex; flex-direction: column; gap: 40px; }
+  .main-col { display: flex; flex-direction: column; gap: 40px; min-width: 0; }
+  @media (min-width: 900px) {
+    .content-grid { display: grid; grid-template-columns: minmax(0, 1fr) 320px; align-items: start; }
+    .journal-col { position: sticky; top: 24px; }
+  }
 
   /* --- hero --- */
   .hero { display: flex; flex-direction: column; gap: 10px; }
@@ -275,31 +284,55 @@
   .roster-grid.reserve details.rider { opacity: 0.86; }
 
   /* --- journal --- */
-  .journal { display: flex; flex-direction: column; gap: 16px; }
-  .entry {
+  .journal { display: flex; flex-direction: column; gap: 12px; }
+  details.entry {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 6px;
-    padding: 16px 18px 18px;
+    position: relative;
+  }
+  details.entry[open] { border-color: var(--accent); }
+  details.entry summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 14px 34px 14px 16px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 4px;
   }
+  details.entry summary::-webkit-details-marker { display: none; }
+  details.entry summary::after {
+    content: "\25BE";
+    position: absolute;
+    top: 15px;
+    right: 14px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  details.entry[open] summary::after { content: "\25B4"; color: var(--accent); }
   .entry h3 {
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: 19px;
+    font-size: 17px;
     margin: 0;
   }
   .entry .entry-meta {
     font-family: var(--font-mono);
-    font-size: 12px;
+    font-size: 11px;
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.04em;
   }
-  .entry p { margin: 0; font-size: 14.5px; color: var(--text); }
-  .entry p + p { margin-top: 2px; }
+  .entry-body {
+    padding: 2px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-top: 1px solid var(--border);
+    margin-top: 2px;
+    padding-top: 10px;
+  }
+  .entry-body p { margin: 0; font-size: 13.5px; color: var(--text); }
 
   footer.note {
     font-size: 13px;
@@ -314,13 +347,12 @@
     section:nth-of-type(1) { animation-delay: 0.11s; }
     section:nth-of-type(2) { animation-delay: 0.14s; }
     section:nth-of-type(3) { animation-delay: 0.17s; }
-    section:nth-of-type(4) { animation-delay: 0.2s; }
     @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
   }
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="wrap has-sidebar">
   <div class="hero">
     <span class="eyebrow">Sporza Wielermanager &middot; Vuelta a España 2026</span>
     <h1>Ploeg van Jan</h1>
@@ -338,23 +370,8 @@
     </div>
   </div>
 
-  <section class="journal">
-    <div class="section-head"><h2>Ritverslag</h2><span class="section-count">2 ritten</span></div>
-    <article class="entry">
-      <h3>Rit 2 &middot; kopman naar Van Aert</h3>
-      <span class="entry-meta">23 augustus 2026 &middot; Monaco &ndash; Manosque, 204 km</span>
-      <p>Rit 2 is met 204 km tussen Monaco en Manosque de langste rit tot nog toe &mdash; een aflopend parcours door de Provence dat overwegend richting een sprint neigt, al dan niet in kleiner comité. Mads Pedersen en Wout van Aert gelden als de topfavorieten voor de dagzege op dit type finale.</p>
-      <p>Pogačar, kopman van rit 1, is voor een sprintfinale geen voor de hand liggende keuze &mdash; zijn kwaliteiten liggen bij tijdritten en bergaankomsten, niet bij een massasprint. Om de kopmanbonus (top 6: 30-25-20-15-10-5 punten) niet verloren te laten gaan, verschuiven we het kopmanschap naar Wout van Aert, die zowel zelf een kanshebber is op de ritzege als doorgaans hoog eindigt in een groepssprint als het net iets anders loopt.</p>
-      <p>Deze wissel kost geen transfer &mdash; kopman kiezen is elke rit gratis en los van de 16-koppige selectie of de opstelling van 12 starters. Na elke rit herbekijken we opnieuw zowel de kopmankeuze als een eventuele wissel in de opstelling, in functie van het parcours van de volgende dag.</p>
-    </article>
-    <article class="entry">
-      <h3>Rit 1 &middot; de basisploeg</h3>
-      <span class="entry-meta">22 augustus 2026 &middot; Monaco, tijdrit 9,4 km</span>
-      <p>Op zaterdag 22 augustus trapte de Vuelta 2026 af met een korte, verraderlijke tijdrit van 9,4 km door de straten van Monaco. Tadej Pogačar bevestigde meteen zijn topfavorietenstatus door Ethan Hayter met amper 0,09 seconden te kloppen &mdash; een van de kleinste marges ooit in een Vuelta-openingsrit &mdash; met Josh Tarling op vier seconden als derde. Pogačar trekt zo meteen de rode leiderstrui aan.</p>
-      <p>Voor onze ploeg kon dit bijna niet beter beginnen: Pogačar stond als kopman voor rit 1 aangeduid, en zijn ritzege plus de bonuspunten voor een top-6 kopman zorgden voor een sterke start. Tussenstand: plaats 14.123 op 37.642 deelnemers &mdash; een prima uitgangspositie, al is een tijdrit een nichediscipline waarin niet elke ploeg evenveel kan scoren.</p>
-      <p>De keuze voor deze basisploeg vertrok van een mix van vanzelfsprekende topfavorieten (Pogačar, Van Aert, Pedersen) aangevuld met renners die in specifieke etappetypes kunnen verrassen zonder het budget op te souperen, zoals klimmers als Buitrago en aanvallers als Kämna. Door bewust meerdere renners uit hetzelfde sterke team te selecteren (drie bij UAE Team Emirates-XRG) hopen we ook geregeld van de teammates-van-de-ritwinnaar-bonus te profiteren, terwijl het maximum van 4 renners per ploeg nooit in het gedrang kwam.</p>
-    </article>
-  </section>
+  <div class="content-grid">
+  <div class="main-col">
 
   <section>
     <div class="section-head"><h2>Renners per ploeg</h2><span class="section-count">9 ploegen</span></div>
@@ -401,6 +418,32 @@
       <details class="rider" data-team="Soudal Quick-Step"><summary><div class="top-row"><span class="bib">16</span></div><span class="name">Fabio Van den Bossche</span><div class="meta"><span>Soudal Quick-Step</span><span class="price">€2M</span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">België</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="2000-09-21"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">&mdash;</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">Lead-out</span></div><a class="profile-link" href="https://sporza.be/nl/tag/wielrennen/spelers/~45745/" target="_blank" rel="noopener">Bekijk profiel op sporza.be &#8599;</a></div></details>
     </div>
   </section>
+
+  </div>
+
+  <aside class="journal-col">
+    <section class="journal">
+      <div class="section-head"><h2>Ritverslag</h2><span class="section-count">2 ritten</span></div>
+      <details class="entry" open>
+        <summary><h3>Rit 2 &middot; kopman naar Van Aert</h3><span class="entry-meta">23 augustus 2026 &middot; Monaco &ndash; Manosque, 204 km</span></summary>
+        <div class="entry-body">
+          <p>Rit 2 is met 204 km tussen Monaco en Manosque de langste rit tot nog toe &mdash; een aflopend parcours door de Provence dat overwegend richting een sprint neigt, al dan niet in kleiner comité. Mads Pedersen en Wout van Aert gelden als de topfavorieten voor de dagzege op dit type finale.</p>
+          <p>Pogačar, kopman van rit 1, is voor een sprintfinale geen voor de hand liggende keuze &mdash; zijn kwaliteiten liggen bij tijdritten en bergaankomsten, niet bij een massasprint. Om de kopmanbonus (top 6: 30-25-20-15-10-5 punten) niet verloren te laten gaan, verschuiven we het kopmanschap naar Wout van Aert, die zowel zelf een kanshebber is op de ritzege als doorgaans hoog eindigt in een groepssprint als het net iets anders loopt.</p>
+          <p>Deze wissel kost geen transfer &mdash; kopman kiezen is elke rit gratis en los van de 16-koppige selectie of de opstelling van 12 starters. Na elke rit herbekijken we opnieuw zowel de kopmankeuze als een eventuele wissel in de opstelling, in functie van het parcours van de volgende dag.</p>
+        </div>
+      </details>
+      <details class="entry">
+        <summary><h3>Rit 1 &middot; de basisploeg</h3><span class="entry-meta">22 augustus 2026 &middot; Monaco, tijdrit 9,4 km</span></summary>
+        <div class="entry-body">
+          <p>Op zaterdag 22 augustus trapte de Vuelta 2026 af met een korte, verraderlijke tijdrit van 9,4 km door de straten van Monaco. Tadej Pogačar bevestigde meteen zijn topfavorietenstatus door Ethan Hayter met amper 0,09 seconden te kloppen &mdash; een van de kleinste marges ooit in een Vuelta-openingsrit &mdash; met Josh Tarling op vier seconden als derde. Pogačar trekt zo meteen de rode leiderstrui aan.</p>
+          <p>Voor onze ploeg kon dit bijna niet beter beginnen: Pogačar stond als kopman voor rit 1 aangeduid, en zijn ritzege plus de bonuspunten voor een top-6 kopman zorgden voor een sterke start. Tussenstand: plaats 14.123 op 37.642 deelnemers &mdash; een prima uitgangspositie, al is een tijdrit een nichediscipline waarin niet elke ploeg evenveel kan scoren.</p>
+          <p>De keuze voor deze basisploeg vertrok van een mix van vanzelfsprekende topfavorieten (Pogačar, Van Aert, Pedersen) aangevuld met renners die in specifieke etappetypes kunnen verrassen zonder het budget op te souperen, zoals klimmers als Buitrago en aanvallers als Kämna. Door bewust meerdere renners uit hetzelfde sterke team te selecteren (drie bij UAE Team Emirates-XRG) hopen we ook geregeld van de teammates-van-de-ritwinnaar-bonus te profiteren, terwijl het maximum van 4 renners per ploeg nooit in het gedrang kwam.</p>
+        </div>
+      </details>
+    </section>
+  </aside>
+
+  </div>
 
   <footer class="note">Sporza Wielermanager &middot; Vuelta a España 2026, 22 augustus &ndash; 13 september. Deze opstelling geldt voor rit 2 en kan nog wijzigen bij transfers. Nationaliteit, leeftijd, UCI-ranking en rennerstype komen van de officiële Sporza Wielermanager-gegevens.</footer>
 </div>
