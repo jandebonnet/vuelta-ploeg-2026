@@ -366,9 +366,13 @@
     font-size: 11px;
     color: var(--text-muted);
     background: var(--surface-2);
+    position: sticky;
+    top: 0;
+    z-index: 1;
   }
   .klassement-table tbody tr:last-child td { border-bottom: none; }
   .klassement-table td.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  .table-scroll.klassement-scroll { max-height: 264px; overflow-y: auto; }
 
   footer.note {
     font-size: 13px;
@@ -416,7 +420,7 @@
     <div class="chart-wrap">
       <svg id="klassement-chart" viewBox="0 0 600 220" role="img" aria-label="Evolutie van het klassementspercentiel per rit"></svg>
     </div>
-    <div class="table-scroll">
+    <div class="table-scroll klassement-scroll">
       <table class="klassement-table">
         <thead><tr><th>Rit</th><th>Datum</th><th>Punten</th><th>Plaats</th><th>Percentiel</th></tr></thead>
         <tbody id="klassement-body"></tbody>
@@ -556,7 +560,7 @@
       svg.appendChild(xl);
     });
 
-    KLASSEMENT_DATA.forEach(function (d) {
+    KLASSEMENT_DATA.slice().reverse().forEach(function (d) {
       var pct = percentiel(d.plaats, d.deelnemers);
       var tr = document.createElement('tr');
       tr.innerHTML = '<td>' + d.rit + '</td>' +
