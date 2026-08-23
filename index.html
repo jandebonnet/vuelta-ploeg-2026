@@ -274,6 +274,33 @@
 
   .roster-grid.reserve details.rider { opacity: 0.86; }
 
+  /* --- journal --- */
+  .journal { display: flex; flex-direction: column; gap: 16px; }
+  .entry {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 18px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .entry h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 19px;
+    margin: 0;
+  }
+  .entry .entry-meta {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .entry p { margin: 0; font-size: 14.5px; color: var(--text); }
+  .entry p + p { margin-top: 2px; }
+
   footer.note {
     font-size: 13px;
     color: var(--text-muted);
@@ -286,7 +313,8 @@
     .stats { animation-delay: 0.08s; }
     section:nth-of-type(1) { animation-delay: 0.11s; }
     section:nth-of-type(2) { animation-delay: 0.14s; }
-    section:nth-of-type(3) { animation-delay: 0.2s; }
+    section:nth-of-type(3) { animation-delay: 0.17s; }
+    section:nth-of-type(4) { animation-delay: 0.2s; }
     @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
   }
 </style>
@@ -309,6 +337,24 @@
       <div class="track"><div class="fill"></div></div>
     </div>
   </div>
+
+  <section class="journal">
+    <div class="section-head"><h2>Ritverslag</h2><span class="section-count">2 ritten</span></div>
+    <article class="entry">
+      <h3>Rit 2 &middot; kopman naar Van Aert</h3>
+      <span class="entry-meta">23 augustus 2026 &middot; Monaco &ndash; Manosque, 204 km</span>
+      <p>Rit 2 is met 204 km tussen Monaco en Manosque de langste rit tot nog toe &mdash; een aflopend parcours door de Provence dat overwegend richting een sprint neigt, al dan niet in kleiner comité. Mads Pedersen en Wout van Aert gelden als de topfavorieten voor de dagzege op dit type finale.</p>
+      <p>Pogačar, kopman van rit 1, is voor een sprintfinale geen voor de hand liggende keuze &mdash; zijn kwaliteiten liggen bij tijdritten en bergaankomsten, niet bij een massasprint. Om de kopmanbonus (top 6: 30-25-20-15-10-5 punten) niet verloren te laten gaan, verschuiven we het kopmanschap naar Wout van Aert, die zowel zelf een kanshebber is op de ritzege als doorgaans hoog eindigt in een groepssprint als het net iets anders loopt.</p>
+      <p>Deze wissel kost geen transfer &mdash; kopman kiezen is elke rit gratis en los van de 16-koppige selectie of de opstelling van 12 starters. Na elke rit herbekijken we opnieuw zowel de kopmankeuze als een eventuele wissel in de opstelling, in functie van het parcours van de volgende dag.</p>
+    </article>
+    <article class="entry">
+      <h3>Rit 1 &middot; de basisploeg</h3>
+      <span class="entry-meta">22 augustus 2026 &middot; Monaco, tijdrit 9,4 km</span>
+      <p>Op zaterdag 22 augustus trapte de Vuelta 2026 af met een korte, verraderlijke tijdrit van 9,4 km door de straten van Monaco. Tadej Pogačar bevestigde meteen zijn topfavorietenstatus door Ethan Hayter met amper 0,09 seconden te kloppen &mdash; een van de kleinste marges ooit in een Vuelta-openingsrit &mdash; met Josh Tarling op vier seconden als derde. Pogačar trekt zo meteen de rode leiderstrui aan.</p>
+      <p>Voor onze ploeg kon dit bijna niet beter beginnen: Pogačar stond als kopman voor rit 1 aangeduid, en zijn ritzege plus de bonuspunten voor een top-6 kopman zorgden voor een sterke start. Tussenstand: plaats 14.123 op 37.642 deelnemers &mdash; een prima uitgangspositie, al is een tijdrit een nichediscipline waarin niet elke ploeg evenveel kan scoren.</p>
+      <p>De keuze voor deze basisploeg vertrok van een mix van vanzelfsprekende topfavorieten (Pogačar, Van Aert, Pedersen) aangevuld met renners die in specifieke etappetypes kunnen verrassen zonder het budget op te souperen, zoals klimmers als Buitrago en aanvallers als Kämna. Door bewust meerdere renners uit hetzelfde sterke team te selecteren (drie bij UAE Team Emirates-XRG) hopen we ook geregeld van de teammates-van-de-ritwinnaar-bonus te profiteren, terwijl het maximum van 4 renners per ploeg nooit in het gedrang kwam.</p>
+    </article>
+  </section>
 
   <section>
     <div class="section-head"><h2>Renners per ploeg</h2><span class="section-count">9 ploegen</span></div>
