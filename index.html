@@ -374,6 +374,11 @@
   .klassement-table td.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
   .table-scroll.klassement-scroll { max-height: 264px; overflow-y: auto; }
 
+  .pct-cell { display: flex; flex-direction: column; gap: 4px; min-width: 64px; }
+  .pct-value { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-weight: 600; }
+  .pct-bar { height: 5px; border-radius: 100px; background: var(--surface-2); overflow: hidden; }
+  .pct-bar-fill { height: 100%; border-radius: 100px; }
+
   footer.note {
     font-size: 13px;
     color: var(--text-muted);
@@ -422,7 +427,7 @@
     </div>
     <div class="table-scroll klassement-scroll">
       <table class="klassement-table">
-        <thead><tr><th>Rit</th><th>Datum</th><th>Punten</th><th>Plaats</th><th>Percentiel</th></tr></thead>
+        <thead><tr><th>Rit</th><th>Datum</th><th>Punten</th><th>Plaats</th><th>Percentiel (beter dan)</th></tr></thead>
         <tbody id="klassement-body"></tbody>
       </table>
     </div>
@@ -523,6 +528,16 @@
       return ((deelnemers - plaats) / deelnemers) * 100;
     }
 
+    function pctColor(pct) {
+      // Okabe-Ito colorblind-safe palette: vermillion (laag) naar blauw (hoog)
+      var low = [214, 94, 0], high = [0, 114, 178];
+      var t = Math.max(0, Math.min(100, pct)) / 100;
+      var r = Math.round(low[0] + (high[0] - low[0]) * t);
+      var g = Math.round(low[1] + (high[1] - low[1]) * t);
+      var b = Math.round(low[2] + (high[2] - low[2]) * t);
+      return 'rgb(' + r + ',' + g + ',' + b + ')';
+    }
+
     function svgEl(tag, attrs) {
       var el = document.createElementNS(svgNS, tag);
       Object.keys(attrs).forEach(function (k) { el.setAttribute(k, attrs[k]); });
@@ -563,12 +578,16 @@
 
     KLASSEMENT_DATA.slice().reverse().forEach(function (d) {
       var pct = percentiel(d.plaats, d.deelnemers);
+      var pctStr = pct.toFixed(1).replace('.', ',');
+      var barWidth = Math.max(0, Math.min(100, pct));
+      var color = pctColor(pct);
       var tr = document.createElement('tr');
       tr.innerHTML = '<td>' + d.rit + '</td>' +
         '<td>' + d.datum + '</td>' +
         '<td class="mono">' + (d.punten != null ? d.punten : '—') + '</td>' +
         '<td class="mono">' + d.plaats.toLocaleString('nl-BE') + ' / ' + d.deelnemers.toLocaleString('nl-BE') + '</td>' +
-        '<td class="mono">Beter dan ' + pct.toFixed(1) + '%</td>';
+        '<td><div class="pct-cell"><span class="pct-value">' + pctStr + '%</span>' +
+        '<div class="pct-bar"><div class="pct-bar-fill" style="width:' + barWidth + '%;background:' + color + '"></div></div></div></td>';
       tbody.appendChild(tr);
     });
   })();
