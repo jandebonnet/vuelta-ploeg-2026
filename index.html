@@ -413,6 +413,7 @@
     <div class="stat"><span class="num">12</span><span class="lbl">Starters / rit</span></div>
     <div class="stat"><span class="num" style="font-size:20px;">Van Aert</span><span class="lbl">Kopman &middot; rit 6</span></div>
     <div class="stat"><span class="num">8</span><span class="lbl">WorldTour-ploegen</span></div>
+    <div class="stat"><span class="num" id="stat-totaalpunten">&mdash;</span><span class="lbl">Totaal punten</span></div>
     <div class="budget-bar">
       <div class="row"><span>Budget besteed</span><span>€92M / €100M</span></div>
       <div class="track"><div class="fill"></div></div>
@@ -588,6 +589,12 @@
     }
 
     countEl.textContent = KLASSEMENT_DATA.length + (KLASSEMENT_DATA.length === 1 ? ' rit' : ' ritten');
+
+    var totaalPuntenEl = document.getElementById('stat-totaalpunten');
+    if (totaalPuntenEl) {
+      var totaalPunten = KLASSEMENT_DATA.reduce(function (sum, d) { return sum + (d.punten || 0); }, 0);
+      totaalPuntenEl.textContent = totaalPunten.toLocaleString('nl-BE');
+    }
 
     [0, 25, 50, 75, 100].forEach(function (v) {
       var y = padT + plotH - (v / 100) * plotH;
