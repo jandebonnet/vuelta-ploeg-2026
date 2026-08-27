@@ -398,6 +398,13 @@
     section:nth-of-type(4) { animation-delay: 0.2s; }
     @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
   }
+  .logboek-table td.les { color: var(--text-muted); font-size: 12.5px; min-width: 220px; }
+  .logboek-table tr.gemist td:nth-child(5) { color: #D55E00; font-weight: 600; }
+  .logboek-table th, .logboek-table td { white-space: nowrap; }
+  .logboek-table td.les { white-space: normal; }
+  .waarde-table tr.nul td { opacity: 0.62; }
+  .waarde-table .waarde-naam { color: inherit; text-decoration: none; border-bottom: 1px solid var(--border); }
+  .waarde-table .waarde-naam:hover { border-bottom-color: var(--accent); }
 </style>
 </head>
 <body>
@@ -433,6 +440,20 @@
       <table class="klassement-table">
         <thead><tr><th>Rit</th><th>Datum</th><th>Punten</th><th>Plaats</th><th>Percentiel (beter dan)</th></tr></thead>
         <tbody id="klassement-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Beslissingslogboek</h2><span class="section-count" id="logboek-count"></span></div>
+    <p class="section-hint">Elke rit één regel: wat we kozen, wat het opleverde, wat we eruit leerden.</p>
+    <div class="table-scroll">
+      <table class="klassement-table logboek-table">
+        <thead><tr>
+          <th>Rit</th><th>Type</th><th>Kopman</th><th>Bezit</th>
+          <th>Kopman&shy;bonus</th><th>Punten</th><th>Percentiel</th><th>Transfer</th><th>Les</th>
+        </tr></thead>
+        <tbody id="logboek-body"></tbody>
       </table>
     </div>
   </section>
@@ -480,6 +501,21 @@
       <details class="rider" data-team="Groupama-FDJ"><summary><div class="top-row"><span class="bib">15</span></div><span class="name">Rémy Rochas</span><div class="meta"><span>Groupama-FDJ</span><span class="meta-right"><span class="points">0pt</span><span class="meta-sep">&middot;</span><span class="price">€2M</span></span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">Frankrijk</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="1996-05-18"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">&mdash;</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">Vrijbuiter/aanvaller</span></div><a class="profile-link" href="https://sporza.be/nl/tag/wielrennen/spelers/~15137/" target="_blank" rel="noopener">Bekijk profiel op sporza.be &#8599;</a></div></details>
       <details class="rider" data-team="Soudal Quick-Step"><summary><div class="top-row"><span class="bib">16</span></div><span class="name">Fabio Van den Bossche</span><div class="meta"><span>Soudal Quick-Step</span><span class="meta-right"><span class="points">14pt</span><span class="meta-sep">&middot;</span><span class="price">€2M</span></span></div></summary><div class="rider-detail"><div class="field"><span class="field-label">Nationaliteit</span><span class="field-value">België</span></div><div class="field"><span class="field-label">Leeftijd</span><span class="field-value mono age" data-dob="2000-09-21"></span></div><div class="field"><span class="field-label">UCI-ranking</span><span class="field-value mono">&mdash;</span></div><div class="field"><span class="field-label">Rennerstype</span><span class="field-value">Lead-out</span></div><a class="profile-link" href="https://sporza.be/nl/tag/wielrennen/spelers/~45745/" target="_blank" rel="noopener">Bekijk profiel op sporza.be &#8599;</a></div></details>
     </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Ploegwaarde</h2><span class="section-count" id="waarde-count"></span></div>
+    <p class="section-hint">Prijs tegenover opbrengst, en hoeveel procent van het deelnemersveld dezelfde renner heeft.</p>
+    <div class="table-scroll">
+      <table class="klassement-table waarde-table">
+        <thead><tr>
+          <th>Renner</th><th>Ploeg</th><th>Prijs</th><th>Punten</th>
+          <th>Punten/M</th><th>Bezit</th><th>AK</th><th>Status</th>
+        </tr></thead>
+        <tbody id="waarde-body"></tbody>
+      </table>
+    </div>
+    <p class="section-hint">AK is de plaats in het algemeen klassement. Bezit is het aandeel ploegen in de Wielermanager dat de renner geselecteerd heeft.</p>
   </section>
 
   </div>
@@ -551,13 +587,58 @@
 </div>
 
 <script>
+  var RITTEN = [
+    { rit: 1, datum: '22 aug', type: 'tijdrit', kopman: 'Pogačar', kopmanBezit: 0.99,
+      kopmanPunten: 30, punten: 261, plaats: 14123, deelnemers: 37642,
+      transfer: null, les: 'Maximale score, maar de meest voor de hand liggende kopman van de hele Vuelta.' },
+    { rit: 2, datum: '23 aug', type: 'heuvelsprint', kopman: 'Van Aert', kopmanBezit: 0.93,
+      kopmanPunten: 0, punten: 212, plaats: 26117, deelnemers: 37856,
+      transfer: null, les: 'Gok op de ritzege in plaats van op een zekere top 6 kostte de volledige kopmanbonus.' },
+    { rit: 4, datum: '25 aug', type: 'bergrit', kopman: 'Pogačar', kopmanBezit: 0.99,
+      kopmanPunten: 30, punten: 375, plaats: 27979, deelnemers: 38040,
+      transfer: null, les: 'De zekere kaart pakte maximaal uit, maar leverde geen voorsprong op het veld.' },
+    { rit: 5, datum: '26 aug', type: 'sprint', kopman: 'Van Aert', kopmanBezit: 0.93,
+      kopmanPunten: 0, punten: 105, plaats: 30071, deelnemers: 38119,
+      transfer: 'Buitrago → Hayter', les: 'Een kopman die lead-out rijdt voor een ploegmaat kan de kopmanbonus niet pakken.' },
+  ];
+
+  var PLOEG_DATA = [
+    { bib:  1, naam: 'Tadej Pogačar', ploeg: 'UAE Team Emirates-XRG', prijs: 15, punten: 415,
+      bezit: 0.99, gc: 1, status: 'start', ref: 11050 },
+    { bib:  2, naam: 'Wout van Aert', ploeg: 'Visma-Lease a Bike', prijs: 11, punten: 93,
+      bezit: 0.92, gc: 76, status: 'start', ref: 938 },
+    { bib:  3, naam: 'Mads Pedersen', ploeg: 'Lidl-Trek', prijs: 11, punten: 73,
+      bezit: 0.76, gc: 136, status: 'start', ref: 175 },
+    { bib:  4, naam: 'João Almeida', ploeg: 'UAE Team Emirates-XRG', prijs: 8, punten: 22,
+      bezit: 0.19, gc: 124, status: 'start', ref: 13101 },
+    { bib:  5, naam: 'Oscar Onley', ploeg: 'Ineos Grenadiers', prijs: 8, punten: 97,
+      bezit: 0.61, gc: 5, status: 'start', ref: 48120 },
+    { bib:  6, naam: 'Finn Fisher-Black', ploeg: 'Red Bull-BORA-hansgrohe', prijs: 3, punten: 72,
+      bezit: 0.24, gc: 48, status: 'start', ref: 45115 },
+    { bib:  7, naam: 'Primož Roglič', ploeg: 'Red Bull-BORA-hansgrohe', prijs: 7, punten: 46,
+      bezit: 0.22, gc: 2, status: 'start', ref: 595 },
+    { bib:  8, naam: 'Sepp Kuss', ploeg: 'Visma-Lease a Bike', prijs: 6, punten: 68,
+      bezit: 0.24, gc: 4, status: 'start', ref: 919 },
+    { bib:  9, naam: 'Ethan Hayter', ploeg: 'Soudal Quick-Step', prijs: 4, punten: 100,
+      bezit: 0.08, gc: 138, status: 'start', ref: 32054 },
+    { bib: 10, naam: 'Jay Vine', ploeg: 'UAE Team Emirates-XRG', prijs: 5, punten: 59,
+      bezit: 0.38, gc: 10, status: 'start', ref: 45781 },
+    { bib: 11, naam: 'Lennard Kämna', ploeg: 'Lidl-Trek', prijs: 3, punten: 8,
+      bezit: 0.02, gc: 98, status: 'start', ref: 318 },
+    { bib: 12, naam: 'Matevž Govekar', ploeg: 'Bahrain Victorious', prijs: 3, punten: 0,
+      bezit: 0.02, gc: 121, status: 'bus', ref: 47944 },
+    { bib: 13, naam: 'Jack Haig', ploeg: 'Ineos Grenadiers', prijs: 2, punten: 0,
+      bezit: 0.03, gc: 88, status: 'start', ref: 283 },
+    { bib: 14, naam: 'Frederik Wandahl', ploeg: 'Red Bull-BORA-hansgrohe', prijs: 2, punten: 0,
+      bezit: 0.01, gc: 122, status: 'bus', ref: 45795 },
+    { bib: 15, naam: 'Rémy Rochas', ploeg: 'Groupama-FDJ', prijs: 2, punten: 0,
+      bezit: 0.01, gc: 104, status: 'bus', ref: 15137 },
+    { bib: 16, naam: 'Fabio Van den Bossche', ploeg: 'Soudal Quick-Step', prijs: 2, punten: 14,
+      bezit: 0.04, gc: 84, status: 'bus', ref: 45745 },
+  ];
+
   (function () {
-    var KLASSEMENT_DATA = [
-      { rit: 1, datum: '22 aug', punten: 261, plaats: 14123, deelnemers: 37642 },
-      { rit: 2, datum: '23 aug', punten: 212, plaats: 26117, deelnemers: 37856 },
-      { rit: 4, datum: '25 aug', punten: 375, plaats: 27979, deelnemers: 38040 },
-      { rit: 5, datum: '26 aug', punten: 105, plaats: 30071, deelnemers: 38119 }
-    ];
+    var KLASSEMENT_DATA = RITTEN;   // bestaande grafiek en tabel blijven ongewijzigd werken
 
     var svgNS = 'http://www.w3.org/2000/svg';
     var svg = document.getElementById('klassement-chart');
@@ -638,6 +719,60 @@
         '<td class="mono">' + d.plaats.toLocaleString('nl-BE') + ' / ' + d.deelnemers.toLocaleString('nl-BE') + '</td>' +
         '<td><div class="pct-cell"><span class="pct-value">' + pctStr + '%</span>' +
         '<div class="pct-bar"><div class="pct-bar-fill" style="width:' + barWidth + '%;background:' + color + '"></div></div></div></td>';
+      tbody.appendChild(tr);
+    });
+  })();
+
+  (function () {
+    var tbody = document.getElementById('logboek-body');
+    var countEl = document.getElementById('logboek-count');
+    if (!tbody) return;
+
+    countEl.textContent = RITTEN.length + (RITTEN.length === 1 ? ' rit' : ' ritten');
+
+    RITTEN.slice().reverse().forEach(function (d) {
+      var pct = ((d.deelnemers - d.plaats) / d.deelnemers) * 100;
+      var bezit = d.kopmanBezit != null ? Math.round(d.kopmanBezit * 100) + '%' : '—';
+      var bonus = d.kopmanPunten != null ? d.kopmanPunten : '—';
+      var tr = document.createElement('tr');
+      if (d.kopmanPunten === 0) tr.className = 'gemist';
+      tr.innerHTML =
+        '<td class="mono">' + d.rit + '</td>' +
+        '<td>' + (d.type || '—') + '</td>' +
+        '<td>' + (d.kopman || '—') + '</td>' +
+        '<td class="mono">' + bezit + '</td>' +
+        '<td class="mono">' + bonus + '</td>' +
+        '<td class="mono">' + d.punten + '</td>' +
+        '<td class="mono">' + pct.toFixed(1).replace('.', ',') + '%</td>' +
+        '<td>' + (d.transfer || '—') + '</td>' +
+        '<td class="les">' + (d.les || '') + '</td>';
+      tbody.appendChild(tr);
+    });
+  })();
+
+  (function () {
+    var tbody = document.getElementById('waarde-body');
+    var countEl = document.getElementById('waarde-count');
+    if (!tbody) return;
+
+    var totaalPrijs = PLOEG_DATA.reduce(function (s, r) { return s + r.prijs; }, 0);
+    countEl.textContent = PLOEG_DATA.length + ' renners · €' + totaalPrijs + 'M';
+
+    PLOEG_DATA.slice().sort(function (a, b) {
+      return (b.punten / b.prijs) - (a.punten / a.prijs);
+    }).forEach(function (r) {
+      var perM = r.punten / r.prijs;
+      var tr = document.createElement('tr');
+      if (r.punten === 0) tr.className = 'nul';
+      tr.innerHTML =
+        '<td><a class="waarde-naam" href="https://sporza.be/nl/tag/wielrennen/spelers/~' + r.ref + '/" target="_blank" rel="noopener">' + r.naam + '</a></td>' +
+        '<td>' + r.ploeg + '</td>' +
+        '<td class="mono">€' + r.prijs + 'M</td>' +
+        '<td class="mono">' + r.punten + '</td>' +
+        '<td class="mono">' + perM.toFixed(1).replace('.', ',') + '</td>' +
+        '<td class="mono">' + Math.round(r.bezit * 100) + '%</td>' +
+        '<td class="mono">' + (r.gc != null ? r.gc + 'e' : '—') + '</td>' +
+        '<td>' + (r.status === 'start' ? 'Start' : 'Bus') + '</td>';
       tbody.appendChild(tr);
     });
   })();
