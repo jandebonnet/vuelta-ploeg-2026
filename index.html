@@ -399,10 +399,11 @@
     section:nth-of-type(4) { animation-delay: 0.2s; }
     @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
   }
-  .logboek-table td.les { color: var(--text-muted); font-size: 12.5px; min-width: 220px; }
+  .logboek-table td.les { color: var(--text-muted); font-size: 12.5px; min-width: 190px; max-width: 280px; }
   .logboek-table tr.gemist td:nth-child(5) { color: #D55E00; font-weight: 600; }
-  .logboek-table th, .logboek-table td { white-space: nowrap; }
-  .logboek-table td.les { white-space: normal; }
+  .logboek-table th, .logboek-table td { white-space: nowrap; padding: 8px 7px; }
+  .logboek-table td.transfer, .logboek-table td.les { white-space: normal; }
+  .logboek-table td.transfer { min-width: 130px; max-width: 190px; }
   .waarde-table tr.nul td { opacity: 0.62; }
   .waarde-table .waarde-naam { color: inherit; text-decoration: none; border-bottom: 1px solid var(--border); }
   .waarde-table .waarde-naam:hover { border-bottom-color: var(--accent); }
@@ -452,7 +453,7 @@
       <table class="klassement-table logboek-table">
         <thead><tr>
           <th>Rit</th><th>Type</th><th>Kopman</th><th>Bezit</th>
-          <th>Kopman&shy;bonus</th><th>Punten</th><th>Percentiel</th><th>Transfer</th><th>Les</th>
+          <th title="Kopmanbonus">Bonus</th><th>Punten</th><th title="Percentiel">Pct.</th><th>Transfer</th><th>Les</th>
         </tr></thead>
         <tbody id="logboek-body"></tbody>
       </table>
@@ -773,7 +774,7 @@
         '<td class="mono">' + bonus + '</td>' +
         '<td class="mono">' + d.punten + '</td>' +
         '<td class="mono">' + pct.toFixed(1).replace('.', ',') + '%</td>' +
-        '<td>' + (d.transfer || '—') + '</td>' +
+        '<td class="transfer">' + (d.transfer || '—') + '</td>' +
         '<td class="les">' + (d.les || '') + '</td>';
       tbody.appendChild(tr);
     });
