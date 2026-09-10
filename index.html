@@ -878,11 +878,14 @@
       svg.appendChild(svgEl('path', { d: linePath, class: 'chart-line' }));
     }
 
-    points.forEach(function (p) {
+    var labelStep = n <= 10 ? 1 : Math.ceil(n / 10);
+    points.forEach(function (p, i) {
       svg.appendChild(svgEl('circle', { cx: p.x, cy: p.y, r: 4, class: 'chart-point' }));
-      var xl = svgEl('text', { x: p.x, y: H - 8, 'text-anchor': 'middle', class: 'chart-axis-label' });
-      xl.textContent = 'Rit ' + p.d.rit;
-      svg.appendChild(xl);
+      if (i % labelStep === 0 || i === n - 1) {
+        var xl = svgEl('text', { x: p.x, y: H - 8, 'text-anchor': 'middle', class: 'chart-axis-label' });
+        xl.textContent = 'Rit ' + p.d.rit;
+        svg.appendChild(xl);
+      }
     });
 
     KLASSEMENT_DATA.slice().reverse().forEach(function (d) {
