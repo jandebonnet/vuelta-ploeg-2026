@@ -402,9 +402,11 @@
   .logboek-table td.les { color: var(--text-muted); font-size: 12.5px; min-width: 190px; max-width: 280px; }
   .logboek-table tr.gemist td:nth-child(5) { color: #D55E00; font-weight: 600; }
   .logboek-table th, .logboek-table td { white-space: nowrap; padding: 8px 7px; }
-  .logboek-table td.transfer, .logboek-table td.les { white-space: normal; }
+  .logboek-table td.transfer, .logboek-table td.les, .logboek-table td.type { white-space: normal; }
   .logboek-table td.transfer { min-width: 130px; max-width: 190px; }
+  .logboek-table td.type { max-width: 150px; }
   .waarde-table tr.nul td { opacity: 0.62; }
+  .waarde-table td.renner, .waarde-table td.ploeg { white-space: nowrap; }
   .waarde-table .waarde-naam { color: inherit; text-decoration: none; border-bottom: 1px solid var(--border); }
   .waarde-table .waarde-naam:hover { border-bottom-color: var(--accent); }
 </style>
@@ -961,7 +963,7 @@
       if (d.kopmanPunten === 0) tr.className = 'gemist';
       tr.innerHTML =
         '<td class="mono">' + d.rit + '</td>' +
-        '<td>' + (d.type || '—') + '</td>' +
+        '<td class="type">' + (d.type || '—') + '</td>' +
         '<td>' + (d.kopman || '—') + '</td>' +
         '<td class="mono">' + bezit + '</td>' +
         '<td class="mono">' + bonus + '</td>' +
@@ -988,8 +990,8 @@
       var tr = document.createElement('tr');
       if (r.punten === 0) tr.className = 'nul';
       tr.innerHTML =
-        '<td><a class="waarde-naam" href="https://sporza.be/nl/tag/wielrennen/spelers/~' + r.ref + '/" target="_blank" rel="noopener">' + r.naam + '</a></td>' +
-        '<td>' + r.ploeg + '</td>' +
+        '<td class="renner"><a class="waarde-naam" href="https://sporza.be/nl/tag/wielrennen/spelers/~' + r.ref + '/" target="_blank" rel="noopener">' + r.naam + '</a></td>' +
+        '<td class="ploeg">' + r.ploeg + '</td>' +
         '<td class="mono">€' + r.prijs + 'M</td>' +
         '<td class="mono">' + r.punten + '</td>' +
         '<td class="mono">' + perM.toFixed(1).replace('.', ',') + '</td>' +
